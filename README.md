@@ -2,6 +2,10 @@
 
 A test implementation of CopilotKit with LangGraph integration, exploring AI-assisted user interfaces. This project serves as a proof of concept for building agentic copilots using modern AI frameworks.
 
+![Demo Screenshot](./public/demo-screenshot.png)
+
+The demo shows a simple proverbs page with an integrated weather widget, showcasing CopilotKit's ability to handle both static content and dynamic data fetching.
+
 ## Tech Stack
 
 - Next.js
@@ -54,6 +58,13 @@ In a new terminal:
 npm install
 npm run dev
 ```
+
+## Features
+
+- 🤖 AI-powered responses using CopilotKit
+- 🌡️ Real-time weather data integration
+- 💅 Modern UI with Tailwind CSS
+- 🔄 Dynamic content generation
 
 ## Project Structure
 
