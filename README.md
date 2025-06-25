@@ -17,20 +17,54 @@ This repository explores the integration of AI assistance directly into web appl
 - Real-time state management between UI and AI
 - Modern UI patterns for AI interfaces
 
+## Getting Started
+
+### 1. Environment Setup
+
+Add your API keys to the existing `.env` files:
+
+In `/agent/.env`:
+
+```
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+In `/src/app/.env`:
+
+```
+LANGGRAPH_DEPLOYMENT_URL=http://localhost:8123  # This matches the local LangGraph server you'll run in step 2
+```
+
+### 2. Start the LangGraph Server
+
+```bash
+cd agent
+npm install
+npm run dev
+```
+
+This starts the LangGraph server on http://localhost:8123 (matching the URL in your `.env`). You can view the LangGraph Studio UI at https://smith.langchain.com/studio?baseUrl=http://localhost:8123
+
+### 3. Start the Next.js App
+
+In a new terminal:
+
+```bash
+# From the root directory
+npm install
+npm run dev
+```
+
+## Project Structure
+
+- `/agent` - LangGraph agent implementation
+- `/src` - Next.js application code
+  - `/app` - Next.js app router pages and API routes
+  - `/lib` - Shared utilities and helpers
+
 ## Status
 
 🧪 This is a test/experimental project for learning and evaluation purposes.
-
-## Getting Started
-
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Set up environment variables:
-   ```env
-   LANGGRAPH_DEPLOYMENT_URL=<your-deployment-url>
-   LANGSMITH_API_KEY=<your-langsmith-api-key>
-   ```
-4. Run the development server: `npm run dev`
 
 ## Note
 
