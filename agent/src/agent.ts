@@ -87,7 +87,7 @@ function shouldContinue({ messages, copilotkit }: AgentState) {
     const toolCallName = lastMessage.tool_calls![0].name;
 
     // 7.3 Only route to the tool node if the tool call is not a CopilotKit action
-    if (!actions || actions.every((action) => action.name !== toolCallName)) {
+    if (!actions || actions.every((action: CopilotAction) => action.name !== toolCallName)) {
       return "tool_node"
     }
   }
@@ -96,13 +96,17 @@ function shouldContinue({ messages, copilotkit }: AgentState) {
   return "__end__";
 }
 
+interface CopilotAction {
+  name: string;
+}
+
 // Define the workflow graph
 const workflow = new StateGraph(AgentStateAnnotation)
   .addNode("chat_node", chat_node)
   .addNode("tool_node", new ToolNode(tools))
   .addEdge(START, "chat_node")
   .addEdge("tool_node", "chat_node")
-  .addConditionalEdges("chat_node", shouldContinue as any);
+  .addConditionalEdges("chat_node", shouldContinue as (state: AgentState) => string);
 
 const memory = new MemorySaver();
 
