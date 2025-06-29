@@ -12,13 +12,22 @@
     "@copilotkit/react-core": "^1.9.1",
     "@copilotkit/react-ui": "^1.9.1",
     "@copilotkit/runtime": "^1.9.1",
+    "@langchain/langgraph": "^0.3.5",
+    "@langchain/openai": "^0.5.16",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "copilotkit": "^0.0.41",
     "lucide-react": "^0.523.0",
     "next": "15.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "^3.3.1",
+    "@copilotkit/sdk-js": "^1.8.13",
+    "@langchain/anthropic": "^0.3.8",
+    "@langchain/community": "^0.3.47",
+    "@langchain/core": "0.3.61",
+    "@langchain/google-genai": "^0.1.4",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
