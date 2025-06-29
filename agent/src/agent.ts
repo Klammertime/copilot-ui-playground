@@ -6,11 +6,11 @@
 import { z } from "zod";
 import { RunnableConfig } from "@langchain/core/runnables";
 import { tool } from "@langchain/core/tools";
-import { ToolNode } from "@langchain/langgraph/prebuilt";
-import { AIMessage, SystemMessage } from "@langchain/core/messages";
 import { MemorySaver, START, StateGraph } from "@langchain/langgraph";
+import { AIMessage, SystemMessage } from "@langchain/core/messages";
 import { Annotation } from "@langchain/langgraph";
 import { ChatOpenAI } from "@langchain/openai";
+import { ChatCompletionMessageToolCall } from "openai/resources/chat/completions";
 
 // 1. Import necessary helpers for CopilotKit actions
 import { convertActionsToDynamicStructuredTools } from "@copilotkit/sdk-js/langgraph";
@@ -103,7 +103,14 @@ interface CopilotAction {
 // Define the workflow graph
 const workflow = new StateGraph(AgentStateAnnotation)
   .addNode("chat_node", chat_node)
-  .addNode("tool_node", new ToolNode(tools))
+  .addNode("tool_node", async (state: AgentState) => {
+    const lastMessage = state.messages[state.messages.length - 1] as AIMessage;
+    const toolCall = lastMessage.tool_calls![0] as unknown as ChatCompletionMessageToolCall;
+    const tool = tools.find(t => t.name === toolCall.function.name);
+    if (!tool) throw new Error(`Tool ${toolCall.function.name} not found`);
+    const result = await tool.invoke(JSON.parse(toolCall.function.arguments));
+    return { messages: result };
+  })
   .addEdge(START, "chat_node")
   .addEdge("tool_node", "chat_node")
   .addConditionalEdges("chat_node", shouldContinue as (state: AgentState) => string);
