@@ -19,9 +19,9 @@
     "@copilotkit/sdk-js": "^1.8.13",
     "@langchain/anthropic": "^0.3.8",
     "@langchain/community": "^0.3.47",
-    "@langchain/core": "^0.3.61",
+    "@langchain/core": "0.3.61",
     "@langchain/google-genai": "^0.1.4",
-    "@langchain/langgraph": "^0.3.0",
+    "@langchain/langgraph": "0.3.5",
     "@langchain/openai": "^0.3.17",
     "zod": "^3.23.8"
   },

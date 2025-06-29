@@ -6,11 +6,11 @@
 import { z } from "zod";
 import { RunnableConfig } from "@langchain/core/runnables";
 import { tool } from "@langchain/core/tools";
-import { MemorySaver, START, StateGraph } from "@langchain/langgraph";
+import { ToolNode } from "@langchain/langgraph/prebuilt";
 import { AIMessage, SystemMessage } from "@langchain/core/messages";
+import { MemorySaver, START, StateGraph } from "@langchain/langgraph";
 import { Annotation } from "@langchain/langgraph";
 import { ChatOpenAI } from "@langchain/openai";
-import { ChatCompletionMessageToolCall } from "openai/resources/chat/completions";
 
 // 1. Import necessary helpers for CopilotKit actions
 import { convertActionsToDynamicStructuredTools } from "@copilotkit/sdk-js/langgraph";
@@ -87,7 +87,7 @@ function shouldContinue({ messages, copilotkit }: AgentState) {
     const toolCallName = lastMessage.tool_calls![0].name;
 
     // 7.3 Only route to the tool node if the tool call is not a CopilotKit action
-    if (!actions || actions.every((action: CopilotAction) => action.name !== toolCallName)) {
+    if (!actions || actions.every((action: any) => action.name !== toolCallName)) {
       return "tool_node"
     }
   }
@@ -96,24 +96,13 @@ function shouldContinue({ messages, copilotkit }: AgentState) {
   return "__end__";
 }
 
-interface CopilotAction {
-  name: string;
-}
-
 // Define the workflow graph
 const workflow = new StateGraph(AgentStateAnnotation)
   .addNode("chat_node", chat_node)
-  .addNode("tool_node", async (state: AgentState) => {
-    const lastMessage = state.messages[state.messages.length - 1] as AIMessage;
-    const toolCall = lastMessage.tool_calls![0] as unknown as ChatCompletionMessageToolCall;
-    const tool = tools.find(t => t.name === toolCall.function.name);
-    if (!tool) throw new Error(`Tool ${toolCall.function.name} not found`);
-    const result = await tool.invoke(JSON.parse(toolCall.function.arguments));
-    return { messages: result };
-  })
+  .addNode("tool_node", new ToolNode(tools))
   .addEdge(START, "chat_node")
   .addEdge("tool_node", "chat_node")
-  .addConditionalEdges("chat_node", shouldContinue as (state: AgentState) => string);
+  .addConditionalEdges("chat_node", shouldContinue as any);
 
 const memory = new MemorySaver();
 
