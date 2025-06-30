@@ -1,4 +1,6 @@
-# AG-UI CopilotKit Test Project
+# AG-UI CopilotKit UI Playground
+
+🚀 [Live Demo](https://copilot-ui-playground-wqzk.vercel.app/)
 
 A test implementation of CopilotKit with LangGraph integration, exploring AI-assisted user interfaces. This project serves as a proof of concept for building agentic copilots using modern AI frameworks.
 
